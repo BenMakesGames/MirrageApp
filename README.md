@@ -107,7 +107,7 @@ Which solution is right for you is something you must decide. I released a profe
 MirrageApp's Future
 -------------------
 
-I'm currently using MirrageApp to develop my own mobile game, so I can at least guarantee that I will be working on &amp; improving it.
+I'm currently using MirrageApp to develop my own mobile game, so I can at least guarantee that I will be working on &amp; improving MirrageApp for as long as I'm working on that game.
 
 MirrageApp depends heavily on jQuery, and I can't decide if I like that or not. In some ways, I regard jQuery as a relic of the IE6-7 days that does not have much place in modern web development; on the other hand, it's a popular library that is familiar to many, and may make MirrageApp more-approachable.
 
