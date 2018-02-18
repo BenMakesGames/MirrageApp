@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, height=device-height, viewport-fit=cover">
+    <title>My App</title>
+    <link rel="stylesheet" href="css/mirrage-app.css">
+
+    <!-- a couple sample MirrageApp services to get you started -->
+    <link rel="stylesheet" href="css/popover-menu.css">
+    <link rel="stylesheet" href="css/status-bar.css">
+
+    <!-- your CSS files -->
+    <link rel="stylesheet" href="css/myapp.css">
+</head>
+<body>
+
+<!-- MirageApp HTML starts here -->
+<header>
+    <div id="Flash"></div>
+</header>
+
+<div id="Page">
+</div>
+
+<div id="LoadingThrobber"><img class="loading" src="gfx/throbber.gif" /></div>
+<div id="RefreshThrobber"><img class="loading" src="gfx/throbber.gif" /></div>
+<!-- MirrageApp HTML ends here -->
+
+<!-- Cordova/Phonegap -->
+<script src="cordova.js"></script>
+
+<!-- third-party libraries -->
+<script src="js/sugar.min.js"></script>
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/jquery.ba-throttle-debounce.min.js"></script>
+<script src="js/jquery-mobile.js"></script>
+<script src="js/jquerymobile-swipeupdown.js"></script>
+<!--
+eventually, you'll need one of these:
+<script src="js/lodash.min.js"></script>
+<script src="js/doT.min.js"></script>
+<script src="js/jsrender.min.js"></script>
+-->
+
+<!-- app.js & initialization -->
+<script src="js/mirrage-app.js"></script>
+<!--
+eventually, you'll need one of these:
+<script src="js/mirrage-lodash.js"></script>
+<script src="js/mirrage-doT.js"></script>
+<script src="js/mirrage-jsrender.js"></script>
+-->
+
+<!-- services -->
+<script src="js/services/popover-menu.js"></script>
+<script src="js/services/status-bar.js"></script>
+
+<!-- dialogs -->
+<!-- no dialogs included in this example... -->
+
+<!-- pages -->
+<script src="js/pages/home.js"></script>
+<script src="js/pages/about.js"></script>
+
+<script>
+    // assigning the app a variable, for easy console reference
+    let myApp = new MirrageApp({
+        config: {
+            /* no config provided in this example */
+        },
+
+        pages: [
+            new Home(),
+            new About(),
+        ],
+
+        dialogs: [
+        ],
+
+        services: [
+            new PopoverMenu(),
+            new StatusBar(),
+        ],
+
+        /*
+         * eventually, you're going to need one of these:
+         *   renderer: new MirrageLodash(),
+         *   renderer: new MirrageJsRender(),
+         *   renderer: new MirrageDoT(),
+         *
+         * for now, let's use the following dummy renderer (remove it when you enable one of the above!)
+         */
+        renderer: {
+            createTemplate: (template) => template,
+            renderTemplate: (template, data) => template,
+        },
+
+        startup: (app) => { app.navTo('MyApp.Home'); },
+    });
+</script>
+</body>
+</html>

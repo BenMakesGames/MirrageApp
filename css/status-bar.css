@@ -1,0 +1,26 @@
+#StatusBar::after
+{
+    display: table;
+    content: ' ';
+    clear: both;
+}
+
+#StatusBar
+{
+    position: sticky;
+    background-color: #666;
+    color: #fff;
+}
+
+#StatusBar .hamburger
+{
+    display: block;
+    float: right;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.5in;
+    line-height: 0.5in;
+    width: 0.5in;
+    height: 0.5in;
+    text-align: center;
+}

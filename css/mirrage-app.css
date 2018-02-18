@@ -1,0 +1,196 @@
+/* styling for for ANY mobile app we make with mirrage-app.js (not specific to any particular app) */
+
+:root {
+    --dialog-z-index: 200;
+    --header-z-index: 300;
+    --throbber-z-index: 400;
+}
+
+* {
+    /* remove touch highlighting, which looks very "web"-y */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent; /* For some Androids */
+}
+
+html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label,
+legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, figure, footer, header, menu, nav, section,
+time, mark, audio, video, details, summary {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-weight: normal;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+html {
+    height: 100%;
+
+    /* prevent jumpiness when loading pages of different heights on browser. gives a more accurate FEEL on desktop,
+    since (most, if not all) mobile browsers implement scrolling w/o desktop-style scrollbars: */
+    overflow-y: scroll;
+}
+
+body {
+    min-height: 100%;
+}
+
+table { border-collapse: collapse; border-spacing: 0; font-size: inherit; }
+th { font-weight: bold; vertical-align: bottom; }
+td { font-weight: normal; vertical-align: top; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; }
+sup { top: -0.5em;}
+sub { bottom: -0.25em; }
+
+button, input, select, textarea { margin: 0; font-size:100%; box-sizing: border-box; }
+
+ul,ol { list-style: none; }
+
+/* page */
+
+#Page::before {
+    display: block;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    font-size: 200%;
+    color: rgba(0, 0, 0, 0);
+    content: '↻';
+    transform: translateX(-50%);
+    transition: color .35s linear, transform .35s linear;
+}
+
+#Page.pullWillRefresh::before {
+    color: rgba(0, 0, 0, 0.6666);
+    transform: translateX(-50%) rotate(179deg); /* not 180, because then the browser might decide to rotate counterclockwise, instead */
+}
+
+/* flash messages */
+
+body > header {
+    position: sticky;
+    display: block;
+    top: 0;
+    z-index: 1;
+}
+
+#Flash {
+    display: none;
+    cursor: pointer;
+    position: relative;
+}
+
+#Flash::after {
+    content: '×'; /* '&times;' wasn't taking, for some reason */
+    color: rgba(0, 0, 0, 0.3333);
+    position: absolute;
+    right: 0.5rem;
+    top: 0.25rem;
+
+}
+
+#Flash > p {
+    margin: 0;
+    padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+    animation: flash-fade 0.5s ease-in 1;
+}
+
+#Flash > p + p {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@keyframes flash-fade {
+    0% {background-color: #fff;}
+    /*33% {background: transparent;}
+    66% {background: #fff;}*/
+    100% {background-color: transparent;}
+}
+
+/* dialogs */
+
+dialog {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    margin: 0;
+    padding: 0;
+    border: none;
+    z-index: var(--dialog-z-index);
+    cursor: pointer; /* or else iPhones don't like the click handler */
+}
+
+dialog.open {
+    display: block;
+}
+.dialog-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+dialog > div {
+    width: 80%;
+    min-width: 300px;
+    max-width: 640px;
+    max-height: 75%;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    background-color: #fff;
+    position: absolute;
+    padding: 1.4rem;
+    box-sizing: border-box;
+    box-shadow: 8px 8px 9px rgba(0, 0, 0, 0.3);
+    font-size: .9rem;
+    overflow: auto;
+    cursor: auto; /* to undo the cursor: pointer on the parent dialog, added for Safarai */
+}
+
+#LoadingThrobber {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--throbber-z-index);
+    background-color: #fff;
+}
+
+label[for], button, input[type=button], input[type=submit], input[type=reset],
+[data-page], [data-dialog], [data-method], [data-close-dialog], [data-scroll-to] {
+    cursor: pointer; /* for iOS */
+}
+
+/* throbbers */
+
+#RefreshThrobber {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--throbber-z-index);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.loading {
+    position: absolute;
+    top: calc(50% - 12.5vw);
+    left: 37.5vw;
+    font-size: 0.3333in;
+    color: #999;
+    width: 25vw;
+    height: 25vw;
+    -webkit-animation: spin 1s ease-in-out infinite;
+    -moz-animation: spin 1s ease-in-out infinite;
+    animation: spin 1s ease-in-out infinite;
+}

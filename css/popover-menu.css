@@ -1,0 +1,46 @@
+:root
+{
+    --popover-menu-overlay-z-index: 500;
+    --popover-menu-z-index: 501;
+}
+
+#PopoverMenu
+{
+    display: none;
+    z-index: var(--popover-menu-z-index);
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: auto;
+    min-width: 2in;
+}
+
+#PopoverMenuOverlay
+{
+    display: none;
+    z-index: var(--popover-menu-overlay-z-index);
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#PopoverMenu.open
+{
+    display: block;
+}
+
+#PopoverMenuOverlay.show
+{
+    display: block;
+}
+
+#PopoverMenu a
+{
+    display: block;
+    padding: 0.06125in 0.125in;
+}
