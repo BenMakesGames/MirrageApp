@@ -469,14 +469,30 @@ class MirrageApp
         return JSON.stringify(args) === JSON.stringify(top.args);
     }
 
-    redrawDialog()
+    /**
+     * Redraw all open dialogs
+     */
+    redrawDialogs()
     {
-        if(typeof this.currentDialogs.length > 0)
+        if(this.currentDialogs.length > 0)
         {
             this.currentDialogs.forEach((d) => {
                 let $dialog = jQuery('#' + d.id.replace(/[^A-Z0-9_-]+/gi, '-'));
                 this.drawDialog(d, $dialog);
             });
+        }
+    }
+
+    /**
+     * Redraw the top, open dialog.
+     */
+    redrawDialog()
+    {
+        if(this.currentDialogs.length > 0)
+        {
+            let dialog = this.currentDialog();
+            let $dialog = jQuery('#' + dialog.id.replace(/[^A-Z0-9_-]+/gi, '-'));
+            this.drawDialog(dialog, $dialog);
         }
     }
 
