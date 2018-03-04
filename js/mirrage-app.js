@@ -32,7 +32,7 @@ class MirrageApp
         this.renderer = settings.renderer;
 
         this.currentPage = null;
-        this.currentDialog = null;
+        this.currentDialogs = [];
 
         this.inited = [];
 
@@ -231,10 +231,15 @@ class MirrageApp
                 });
             }
 
-            if(_this.currentDialog !== null && typeof _this.currentDialog.resize !== 'undefined')
+            if(_this.currentDialogs.length > 0)
             {
-                let dialogResizePromise = new Promise((resolve, reject) => {
-                    _this.currentDialog.resize(resolve, reject);
+                _this.currentDialogs.forEach((d) => {
+                    if(typeof d.resize !== 'undefined')
+                    {
+                        let dialogResizePromise = new Promise((resolve, reject) => {
+                            d.resize(resolve, reject);
+                        });
+                    }
                 });
             }
         }));
@@ -284,9 +289,6 @@ class MirrageApp
         if(typeof components.dialogs !== 'undefined' && components.dialogs.constructor === Array)
         {
             components.dialogs.forEach(function(dialog) {
-                let $dialog = jQuery('<dialog id="' + dialog.id.replace(/[^A-Z0-9_-]+/gi, '-') + '" />');
-                jQuery('body').append($dialog);
-
                 _this.dialogs[dialog.id] = dialog;
                 _this.dialogs[dialog.id].app = _this;
             });
@@ -410,7 +412,6 @@ class MirrageApp
         return new Promise((resolve, reject) => {
             let _this = this;
             let openPromise = null;
-            let $element = jQuery('#' + pageId.replace(/[^A-Z0-9_-]+/gi, '-'));
 
             _this.currentPage = _this.pages[pageId];
 
@@ -466,6 +467,17 @@ class MirrageApp
 
         // TODO: this solution works EXCEPT when properties are in a different order, which is a little wonky...
         return JSON.stringify(args) === JSON.stringify(top.args);
+    }
+
+    redrawDialog()
+    {
+        if(typeof this.currentDialogs.length > 0)
+        {
+            this.currentDialogs.forEach((d) => {
+                let $dialog = jQuery('#' + d.id.replace(/[^A-Z0-9_-]+/gi, '-'));
+                this.drawDialog(d, $dialog);
+            });
+        }
     }
 
     redrawPage()
@@ -644,15 +656,15 @@ class MirrageApp
             else
                 window.console.log('Warning: tried to call Action "' + methodName + '" on Service "' + serviceName + '", but no such Action on that Service.');
         }
-        else if(this.currentDialog !== null)
+        else if(this.currentDialogs.length > 0)
         {
             // we don't check for type === 'function', because we WANT to throw the dev an error if they try to call
             // a string or something. that's probably a mistake on the dev's part; hiding that mistake would be
             // frustrating.
-            if(typeof this.currentDialog[action] !== 'undefined')
-                this.currentDialog[action]($element, event);
+            if(typeof this.currentDialog()[action] !== 'undefined')
+                this.currentDialog()[action]($element, event);
             else
-                window.console.log('Warning: tried to call Action "' + action + '", but there is no such Action on Dialog "' + this.currentDialog.id + '".');
+                window.console.log('Warning: tried to call Action "' + action + '", but there is no such Action on Dialog "' + this.currentDialog().id + '".');
         }
         else
         {
@@ -661,6 +673,14 @@ class MirrageApp
             else
                 window.console.log('Warning: tried to call Action "' + action + '", but there is no such Action on Page "' + this.currentPage.id + '".');
         }
+    }
+
+    currentDialog()
+    {
+        if(this.currentDialogs.length > 0)
+            return this.currentDialogs[this.currentDialogs.length - 1];
+        else
+            return null;
     }
 
     /**
@@ -677,9 +697,11 @@ class MirrageApp
 
         let _this = this;
         let dialog = this.dialogs[dialogId];
-        let $dialog = jQuery('#' + dialogId.replace(/[^A-Z0-9_-]+/gi, '-'));
+        let $dialog = jQuery('<dialog id="' + dialog.id.replace(/[^A-Z0-9_-]+/gi, '-') + '" />');
 
-        this.currentDialog = dialog;
+        jQuery('body').append($dialog);
+
+        this.currentDialogs.push(dialog);
 
         // we don't check for type === 'function', because we WANT to throw the dev an error if they try to call
         // a string or something. that's probably a mistake on the dev's part; hiding that mistake would be
@@ -708,10 +730,16 @@ class MirrageApp
         }
     }
 
+    closeDialogs()
+    {
+        this.currentDialogs = [];
+        jQuery('dialog').remove();
+    }
+
     closeDialog()
     {
-        this.currentDialog = null;
-        jQuery('dialog.open').removeClass('open');
+        this.currentDialogs.pop();
+        jQuery('dialog').last().remove();
     }
 
     /**
